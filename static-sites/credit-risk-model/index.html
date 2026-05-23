@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-i18n="pageTitle">Financial Risk Score Modeling — Professional Diagnostics</title>
+    <meta
+      name="description"
+      content="Portfolio-ready dashboard for a loan risk score prediction project. Includes leakage analysis, calibration, fairness auditing, and professional model governance."
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#overview" aria-label="Financial Risk Score Modeling home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span data-i18n="brand">Risk Score Modeling</span>
+      </a>
+      <nav aria-label="Page sections">
+        <a href="#models"><span data-i18n="nav.models">Models</span></a>
+        <a href="#tuning"><span data-i18n="nav.tuning">Tuning</span></a>
+        <a href="#diagnostics"><span data-i18n="nav.diagnostics">Diagnostics</span></a>
+        <a href="#drivers"><span data-i18n="nav.drivers">Drivers</span></a>
+        <a href="#fairness"><span data-i18n="nav.fairness">Fairness</span></a>
+        <a href="#governance"><span data-i18n="nav.governance">Governance</span></a>
+        <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language">中文</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="overview" class="band overview-band">
+        <div class="wrap overview-grid">
+          <div class="intro">
+            <p class="eyebrow">PSTAT 131 Final Project — Professional Revision</p>
+            <h1 data-i18n="title">Financial Risk Score Modeling</h1>
+            <p class="lede" data-i18n="lede">
+              A production-oriented regression analysis for estimating applicant risk score, with strict leakage control,
+              calibration auditing, fairness assessment, and model governance.
+            </p>
+            <div class="summary-grid" id="summary-grid"></div>
+          </div>
+          <div class="leaderboard" aria-label="Model leaderboard">
+            <div class="panel-title">
+              <p>Best Model</p>
+              <h2 id="best-model-heading">Random Forest</h2>
+            </div>
+            <div id="model-bars" class="chart compact-chart"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="models" class="band">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow" data-i18n="models.eyebrow">Model Comparison</p>
+            <h2 data-i18n="models.title">Test Set Performance</h2>
+          </div>
+          <div class="metrics-table-wrap">
+            <table class="metrics-table">
+              <thead>
+                <tr>
+                  <th data-i18n="table.model">Model</th>
+                  <th>RMSE</th>
+                  <th>MAE</th>
+                  <th>R²</th>
+                  <th data-i18n="table.bias">Bias</th>
+                  <th data-i18n="table.within3">|Error| ≤ 3</th>
+                </tr>
+              </thead>
+              <tbody id="metrics-body"></tbody>
+            </table>
+          </div>
+          <div class="model-notes">
+            <article>
+              <h3 data-i18n="models.note1.title">Leakage-Free CV</h3>
+              <p data-i18n-html="models.note1.body">
+                After removing <code>InterestRate</code>, <code>BaseInterestRate</code>, and
+                <code>MonthlyLoanPayment</code>, the honest CV RMSE is
+                <strong id="leakage-free-rmse">—</strong> (<strong id="leakage-increase">—</strong>% higher).
+              </p>
+            </article>
+            <article>
+              <h3 data-i18n="models.note2.title">Single Test Evaluation</h3>
+              <p data-i18n="models.note2.body">
+                Repeated 5×5 CV inside training set. Test set evaluated exactly once after model selection — no
+                test-set leakage into tuning.
+              </p>
+            </article>
+            <article>
+              <h3 data-i18n="models.note3.title">Model Selection</h3>
+              <p data-i18n="models.note3.body">
+                Random Forest is selected for lowest test RMSE. The tree-based ensemble naturally captures nonlinear
+                interactions among financial variables.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="tuning" class="band tint">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow" data-i18n="tuning.eyebrow">Hyperparameter Search</p>
+            <h2 data-i18n="tuning.title">Tuning Results</h2>          </div>
+          <div class="dashboard-grid">
+            <article class="chart-panel">
+              <div class="panel-title">
+                <p>KNN</p>
+                <h3>Neighbors vs CV RMSE</h3>
+              </div>
+              <div id="knn-line" class="chart"></div>
+            </article>
+            <article class="chart-panel">
+              <div class="panel-title">
+                <p>Random Forest</p>
+                <h3>mtry and min_n Grid</h3>
+              </div>
+              <div id="rf-heatmap" class="chart"></div>
+            </article>
+            <article class="chart-panel wide">
+              <div class="panel-title">
+                <p>Selected Hyperparameters</p>
+                <h3>Final Model Settings</h3>
+              </div>
+              <div id="best-params" class="params-grid"></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="diagnostics" class="band">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow" data-i18n="diag.eyebrow">Diagnostics</p>
+            <h2 data-i18n="diag.title">Random Forest Residual Review</h2>
+          </div>
+          <div class="dashboard-grid">
+            <article class="chart-panel wide">
+              <div class="panel-title">
+                <p data-i18n="diag.scatter.label">Predicted vs Actual</p>
+                <h3 data-i18n="diag.scatter.title">Held-Out Sample</h3>
+              </div>
+              <div id="scatter" class="chart scatter-chart"></div>
+            </article>
+            <article class="chart-panel">
+              <div class="panel-title">
+                <p data-i18n="diag.residual.label">Residuals</p>
+                <h3 data-i18n="diag.residual.title">Error Distribution</h3>
+              </div>
+              <div id="residual-hist" class="chart"></div>
+            </article>
+            <article class="chart-panel">
+              <div class="panel-title">
+                <p data-i18n="diag.segment.label">Segments</p>
+                <h3 data-i18n="diag.segment.title">RMSE by Group</h3>
+              </div>
+              <div class="segment-tabs" id="segment-tabs" role="tablist"></div>
+              <div id="segment-bars" class="chart"></div>
+            </article>
+            <article class="chart-panel wide">
+              <div class="panel-title">
+                <p data-i18n="diag.calibration.label">Calibration</p>
+                <h3 data-i18n="diag.calibration.title">Mean Predicted vs Mean Actual (Reliability Curve)</h3>
+              </div>
+              <div id="calibration-chart" class="chart scatter-chart"></div>
+            </article>
+            <article class="chart-panel">
+              <div class="panel-title">
+                <p data-i18n="diag.coverage.label">Coverage</p>
+                <h3 data-i18n="diag.coverage.title">Prediction Interval Coverage</h3>
+              </div>
+              <div id="coverage-stats" class="params-grid"></div>
+            </article>
+            <article class="chart-panel">
+              <div class="panel-title">
+                <p data-i18n="diag.stability.label">Stability</p>
+                <h3 data-i18n="diag.stability.title">Error Distribution Diagnostics</h3>
+              </div>
+              <div id="stability-stats" class="detail-list"></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="drivers" class="band">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow"><span data-i18n="drivers.eyebrow">Key Drivers</span></p>
+            <h2><span data-i18n="drivers.title">Feature Impact &amp; Risk Patterns</span></h2>
+          </div>
+          <div class="dashboard-grid">
+            <article class="chart-panel wide">
+              <div class="panel-title">
+                <p data-i18n="drivers.importance.label">Random Forest</p>
+                <h3 data-i18n="drivers.importance.title">Variable Importance (Top 12)</h3>
+              </div>
+              <div id="importance-bars" class="chart"></div>
+            </article>
+            <article class="chart-panel wide">
+              <div class="panel-title">
+                <p data-i18n="drivers.correlation.label">Correlation Analysis</p>
+                <h3 data-i18n="drivers.correlation.title">Top 10 Correlations with Target</h3>
+              </div>
+              <div id="correlation-bars" class="chart"></div>
+            </article>
+            <article class="chart-panel">
+              <div class="panel-title">
+                <p data-i18n="drivers.approval.label">Portfolio View</p>
+                <h3 data-i18n="drivers.approval.title">Approval Rate by RiskScore Band</h3>
+              </div>
+              <div id="approval-bars" class="chart"></div>
+            </article>
+            <article class="chart-panel">
+              <div class="panel-title">
+                <p data-i18n="drivers.pairs.label">Feature Redundancy</p>
+                <h3 data-i18n="drivers.pairs.title">High Correlation Pairs</h3>
+              </div>
+              <div id="corr-pairs" class="pair-list"></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="fairness" class="band tint">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow" data-i18n="fairness.eyebrow">Fairness &amp; Bias</p>
+            <h2 data-i18n="fairness.title">Segmented Bias Assessment</h2>
+          </div>
+          <div class="dashboard-grid">
+            <article class="chart-panel wide">
+              <div class="panel-title">
+                <p data-i18n="fairness.employ.label">Employment Status</p>
+                <h3 data-i18n="fairness.employ.title">Systematic Bias (t-test)</h3>
+              </div>
+              <div id="fairness-employment" class="chart"></div>
+            </article>
+            <article class="chart-panel">
+              <div class="panel-title">
+                <p data-i18n="fairness.bankruptcy.label">Bankruptcy History</p>
+                <h3 data-i18n="fairness.bankruptcy.title">Bias Comparison</h3>
+              </div>
+              <div id="fairness-bankruptcy" class="chart"></div>
+            </article>
+            <article class="chart-panel">
+              <div class="panel-title">
+                <p data-i18n="fairness.variance.label">Error Variance</p>
+                <h3 data-i18n="fairness.variance.title">Reliability by Segment</h3>
+              </div>
+              <div id="fairness-variance" class="chart"></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="governance" class="band">
+        <div class="wrap closing">
+          <div>
+            <p class="eyebrow" data-i18n="gov.eyebrow">Model Governance</p>
+            <h2 data-i18n="gov.title">Production Readiness Assessment</h2>
+          </div>
+          <div>
+            <article class="governance-card">
+              <h3 data-i18n="gov.card1.title">Data Definition</h3>
+              <p data-i18n-html="gov.card1.body">Only application-time features should enter training. Leakage features (<code>InterestRate</code>,
+              <code>BaseInterestRate</code>, <code>MonthlyLoanPayment</code>) inflated test RMSE by ~9%.</p>
+            </article>
+            <article class="governance-card">
+              <h3 data-i18n="gov.card2.title">Calibration Monitoring</h3>
+              <p data-i18n-html="gov.card2.body">Prediction intervals are slightly overconfident (78% within 1σ vs expected 68%). At extreme risk bands,
+              calibration error reaches 2.3 points. Production deployment requires per-cohort reliability curves.</p>
+            </article>
+            <article class="governance-card">
+              <h3 data-i18n="gov.card3.title">Fairness Auditing</h3>
+              <p data-i18n-html="gov.card3.body">Significant bias detected: unemployed applicants are under-predicted by 2.3 points (p &lt; 0.001).
+              Fairness remediation (reweighing, bias mitigation) is needed before deployment.</p>
+            </article>
+            <article class="governance-card">
+              <h3 data-i18n="gov.card4.title">Explainability</h3>
+              <p data-i18n-html="gov.card4.body">SHAP or LIME per-prediction explanations required for audit trail. Current VIP provides global importance
+              but no instance-level interpretability.</p>
+            </article>
+            <article class="governance-card">
+              <h3 data-i18n="gov.card5.title">Model Card &amp; Compliance</h3>
+              <p data-i18n-html="gov.card5.body">Document intended use, performance boundaries, fairness thresholds, and regulatory compliance per
+              evolving AI/ML in credit scoring standards.</p>
+            </article>
+            <article class="governance-card">
+              <h3 data-i18n="gov.card6.title">Score: 4/10 vs Production</h3>
+              <p data-i18n-html="gov.card6.body">As a course project: 8/10. As a production risk model: 4/10. The gap is not in algorithm choice but in
+              data definition, leakage control, and model governance infrastructure.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="band tint">
+        <div class="wrap closing">
+          <div>
+            <p class="eyebrow" data-i18n="changes.eyebrow">Project Upgrade</p>
+            <h2 data-i18n="changes.title">What Changed</h2>
+          </div>
+          <ul>
+            <li data-i18n-html="changes.item1"><strong>Leakage control:</strong> removed InterestRate, BaseInterestRate, MonthlyLoanPayment. Honest CV RMSE reported alongside original.</li>
+            <li data-i18n-html="changes.item2"><strong>Repeated CV:</strong> 5×5 folds inside training set only. Single held-out test evaluation.</li>
+            <li data-i18n-html="changes.item3"><strong>Calibration:</strong> reliability curves, prediction interval coverage, error distribution diagnostics.</li>
+            <li data-i18n-html="changes.item4"><strong>Stratified error:</strong> segmented RMSE and bias by income, credit, bankruptcy, employment, and risk band.</li>
+            <li data-i18n-html="changes.item5"><strong>Fairness auditing:</strong> t-tests for systematic bias per segment.</li>
+            <li data-i18n-html="changes.item6"><strong>Model governance:</strong> production readiness assessment with specific remediation recommendations.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <span data-i18n="footer.left">Financial Risk Score Modeling — Professional Revision</span>
+        <span data-i18n="footer.right">Static portfolio dashboard</span>
+      </div>
+    </footer>
+
+    <script src="assets/lang.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+  </body>
+</html>

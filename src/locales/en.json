@@ -118,55 +118,38 @@
         ],
         "links": {
           "github": "",
-          "demo": "./girsanov-explorer/"
+          "demo": "/girsanov-explorer/"
         }
       },
       {
         "id": "credit-risk",
-        "title": "Credit Assessment & Pre-Loan Risk Control",
+        "title": "Credit Risk Scoring — B2B Trade Credit Risk Control",
         "period": "Mar 2025 – Jun 2025",
         "type": "Individual Project",
-        "description": "Designed a pre-loan risk scoring system using real-world business transaction data to address trust deficits and default risk in B2B/B2C commerce. Led full-pipeline feature engineering and compared Logistic Regression vs. XGBoost — using Variable Importance (VIP) for business factor attribution.",
+        "description": "End-to-end credit risk scoring system: built a production-oriented loan risk model in R (tidymodels) with strict leakage control, 5x5 repeated CV, calibration auditing, and fairness assessment (found systematic bias against unemployed applicants, p<0.001). Operationalized the methodology into a full-stack B2B trade credit dashboard (React/FastAPI) for cross-border partner creditworthiness. GitHub repo includes: R modeling pipeline, Python diagnostics, and interactive dashboard.",
         "tech": [
-          "Python",
-          "XGBoost",
-          "scikit-learn",
-          "Feature Engineering",
-          "SQL"
-        ],
-        "metrics": [
-          {
-            "label": "RMSE",
-            "value": "2.82"
-          }
-        ],
-        "links": {
-          "github": "",
-          "demo": ""
-        }
-      },
-      {
-        "id": "b2b-risk-dashboard",
-        "title": "B2B Trade Credit Risk Dashboard",
-        "period": "2026 (In Progress)",
-        "type": "Personal Project",
-        "description": "Full-stack interactive web application that scores cross-border trade partner creditworthiness. React frontend with Python/FastAPI backend — directly operationalizing the credit risk modeling approach for real-world B2B use cases in international trade.",
-        "tech": [
-          "React",
+          "R",
           "Python",
           "FastAPI",
-          "XGBoost",
+          "React",
+          "tidymodels",
+          "Fairness Auditing",
+          "Model Governance",
           "Docker"
         ],
         "metrics": [
           {
-            "label": "Status",
-            "value": "In Progress"
+            "label": "Test RMSE",
+            "value": "2.82"
+          },
+          {
+            "label": "Honest CV",
+            "value": "3.22"
           }
         ],
         "links": {
           "github": "",
-          "demo": ""
+          "demo": "/credit-risk-model/"
         }
       }
     ]
@@ -245,11 +228,6 @@
     "section_title": "What I'm Building Now",
     "subtitle": "Gap year projects at the intersection of finance, data, and technology",
     "items": [
-      {
-        "title": "B2B Trade Credit Risk Dashboard",
-        "description": "Full-stack web app for cross-border trade partner credit scoring. React + FastAPI backend.",
-        "tag": "Best Fit"
-      },
       {
         "title": "Carbon Credit Market Analyzer",
         "description": "Dashboard tracking carbon credit pricing with predictive trend models.",

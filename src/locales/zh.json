@@ -118,55 +118,38 @@
         ],
         "links": {
           "github": "",
-          "demo": "./girsanov-explorer/"
+          "demo": "/girsanov-explorer/"
         }
       },
       {
         "id": "credit-risk",
-        "title": "信用评估与风控前置项目",
+        "title": "信用风险评分 — B2B贸易信用风控体系",
         "period": "2025年3月 – 2025年6月",
         "type": "个人项目",
-        "description": "解决B端/C端商业交易中的信任危机与违约风险，基于真实业务数据集构建前置风险评分体系。主导全链路特征工程（缺失值处理、特征缩放等），对比调优逻辑回归、XGBoost等主流算法；重点运用VIP（变量重要性）进行业务归因拆解。该套逻辑可直接迁移用于B2B跨境贸易中的海外买家背调与安全交易评估。",
+        "description": "端到端信用风险评分系统：使用R (tidymodels)构建面向生产环境的贷款风险模型，包含严格的数据泄露控制、5×5重复交叉验证、校准度审计和公平性评估（发现对失业申请人的系统性负偏误，p<0.001）。将方法论落地为全栈B2B贸易信用风险仪表板（React/FastAPI），用于跨境合作伙伴信用评估。GitHub仓库含：R建模流水线、Python诊断脚本、交互式仪表板。",
         "tech": [
-          "Python",
-          "XGBoost",
-          "scikit-learn",
-          "特征工程",
-          "SQL"
-        ],
-        "metrics": [
-          {
-            "label": "RMSE",
-            "value": "2.82"
-          }
-        ],
-        "links": {
-          "github": "",
-          "demo": ""
-        }
-      },
-      {
-        "id": "b2b-risk-dashboard",
-        "title": "B2B跨境贸易信用风险仪表板",
-        "period": "2026年（进行中）",
-        "type": "个人项目",
-        "description": "全栈交互式Web应用，对跨境贸易合作伙伴进行信用评分。React前端配合Python/FastAPI后端——将信用风险建模方法论直接落地为面向真实B2B国际贸易场景的实用工具。",
-        "tech": [
-          "React",
+          "R",
           "Python",
           "FastAPI",
-          "XGBoost",
+          "React",
+          "tidymodels",
+          "公平性审计",
+          "模型治理",
           "Docker"
         ],
         "metrics": [
           {
-            "label": "状态",
-            "value": "进行中"
+            "label": "测试集 RMSE",
+            "value": "2.82"
+          },
+          {
+            "label": "诚实 CV",
+            "value": "3.22"
           }
         ],
         "links": {
           "github": "",
-          "demo": ""
+          "demo": "/credit-risk-model/"
         }
       }
     ]
@@ -245,11 +228,6 @@
     "section_title": "正在进行中的项目",
     "subtitle": "横跨金融、数据与技术的 Gap Year 探索",
     "items": [
-      {
-        "title": "B2B跨境贸易信用风险仪表板",
-        "description": "全栈Web应用，对跨境合作伙伴进行信用评分。React + FastAPI架构。",
-        "tag": "核心项目"
-      },
       {
         "title": "碳信用市场分析平台",
         "description": "追踪碳信用定价并运用预测模型分析市场趋势的交互看板。",
