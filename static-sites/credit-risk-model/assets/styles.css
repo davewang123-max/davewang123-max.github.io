@@ -95,6 +95,25 @@ code {
   outline: none;
 }
 
+.lang-toggle {
+  margin-left: 8px;
+  padding: 6px 12px;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 680;
+  letter-spacing: 0.03em;
+  transition: background 0.15s;
+}
+
+.lang-toggle:hover {
+  background: var(--teal-dark);
+}
+
 .band {
   padding: 76px 0;
   border-bottom: 1px solid var(--line);

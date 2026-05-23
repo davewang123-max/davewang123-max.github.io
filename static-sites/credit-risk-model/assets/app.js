@@ -1,3 +1,26 @@
+// ── I18N ─────────────────────────────────────────────────────────────────
+let currentLang = localStorage.getItem("creditRiskLang") || "en";
+
+function t(key) {
+  return (I18N[currentLang] && I18N[currentLang][key]) || (I18N.en[key]) || key;
+}
+
+function tHtml(key) {
+  return t(key);
+}
+
+function applyLang() {
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    if (el.tagName === "TITLE") { document.title = t(el.dataset.i18n); return; }
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+    el.innerHTML = tHtml(el.dataset.i18nHtml);
+  });
+  document.querySelector("#langToggle").textContent = t("lang.toggle");
+}
+
 const data = globalThis.PROJECT_DATA;
 if (!data) throw new Error("PROJECT_DATA not found. Load data.js before app.js.");
 const palette = {
@@ -87,14 +110,14 @@ function hideTooltip() {
 function renderSummary() {
   const meta = data.meta;
   const rows = [
-    ["Rows", fmt.format(meta.rows)],
-    ["Predictors", fmt.format(meta.modelPredictors)],
-    ["Test RMSE", fmt.format(meta.bestRmse)],
-    ["Leakage-Free CV", meta.leakageFreeRmse ? fmt.format(meta.leakageFreeRmse) : "—"],
-    ["Best Model", meta.bestModel],
-    ["R²", fmt.format(meta.bestR2)],
-    ["Missing Values", fmt.format(meta.missingValues)],
-    ["Risk Range", `${meta.targetMin}–${meta.targetMax}`],
+    [t("summary.rows"), fmt.format(meta.rows)],
+    [t("summary.predictors"), fmt.format(meta.modelPredictors)],
+    [t("summary.testRmse"), fmt.format(meta.bestRmse)],
+    [t("summary.leakageFreeCV"), meta.leakageFreeRmse ? fmt.format(meta.leakageFreeRmse) : "—"],
+    [t("summary.bestModel"), meta.bestModel],
+    [t("summary.r2"), fmt.format(meta.bestR2)],
+    [t("summary.missing"), fmt.format(meta.missingValues)],
+    [t("summary.riskRange"), `${meta.targetMin}–${meta.targetMax}`],
   ];
   const grid = document.querySelector("#summary-grid");
   rows.forEach(([label, value]) => {
@@ -150,7 +173,7 @@ function renderHorizontalMetricBars(containerId, rows) {
     }));
     svg.append(text({ x: margin.left + x(row.rmse) + 10, y: y + 27, class: "bar-label" }, fmt.format(row.rmse)));
   });
-  svg.append(text({ x: margin.left, y: 352, class: "chart-label" }, "Lower RMSE is better"));
+  svg.append(text({ x: margin.left, y: 352, class: "chart-label" }, t("chart.lowerIsBetter")));
 }
 
 // ── KNN LINE ─────────────────────────────────────────────────────────────
@@ -180,8 +203,8 @@ function renderLine(containerId, rows) {
 
   svg.append(svgEl("line", { x1: margin.left, x2: margin.left + innerW, y1: margin.top + innerH, y2: margin.top + innerH, stroke: palette.line }));
   svg.append(svgEl("line", { x1: margin.left, x2: margin.left, y1: margin.top, y2: margin.top + innerH, stroke: palette.line }));
-  svg.append(text({ x: margin.left + innerW / 2, y: 318, "text-anchor": "middle", class: "chart-label" }, "Neighbors"));
-  svg.append(text({ x: 15, y: margin.top + innerH / 2, transform: `rotate(-90 15 ${margin.top + innerH / 2})`, "text-anchor": "middle", class: "chart-label" }, "CV RMSE"));
+  svg.append(text({ x: margin.left + innerW / 2, y: 318, "text-anchor": "middle", class: "chart-label" }, t("chart.neighbors")));
+  svg.append(text({ x: 15, y: margin.top + innerH / 2, transform: `rotate(-90 15 ${margin.top + innerH / 2})`, "text-anchor": "middle", class: "chart-label" }, t("chart.cvRmse")));
   [3, 7, 11, 15, 19, 21].forEach((tick) => {
     svg.append(text({ x: x(tick), y: 298, "text-anchor": "middle", class: "tick-label" }, String(tick)));
   });
@@ -224,8 +247,8 @@ function renderHeatmap(containerId, rows) {
     svg.append(rect);
     svg.append(text({ x: x + cellW / 2 - 4, y: y + cellH / 2 + 4, "text-anchor": "middle", fill: "#fff", "font-size": 13, "font-weight": 760 }, fmt.format(row.rmse)));
   });
-  svg.append(text({ x: margin.left + (cellW * mtrys.length) / 2, y: 326, "text-anchor": "middle", class: "chart-label" }, "mtry"));
-  svg.append(text({ x: 15, y: margin.top + (cellH * mins.length) / 2, transform: `rotate(-90 15 ${margin.top + (cellH * mins.length) / 2})`, "text-anchor": "middle", class: "chart-label" }, "min_n"));
+  svg.append(text({ x: margin.left + (cellW * mtrys.length) / 2, y: 326, "text-anchor": "middle", class: "chart-label" }, t("chart.mtry")));
+  svg.append(text({ x: 15, y: margin.top + (cellH * mins.length) / 2, transform: `rotate(-90 15 ${margin.top + (cellH * mins.length) / 2})`, "text-anchor": "middle", class: "chart-label" }, t("chart.min_n")));
 }
 
 // ── BEST PARAMS ──────────────────────────────────────────────────────────
@@ -303,9 +326,9 @@ function renderScatter() {
     point.addEventListener("mouseleave", hideTooltip);
     svg.append(point);
   });
-  svg.append(text({ x: margin.left + innerW / 2, y: 405, "text-anchor": "middle", class: "chart-label" }, "Actual RiskScore"));
-  svg.append(text({ x: 16, y: margin.top + innerH / 2, transform: `rotate(-90 16 ${margin.top + innerH / 2})`, "text-anchor": "middle", class: "chart-label" }, "Predicted RiskScore"));
-  svg.append(text({ x: margin.left + innerW - 4, y: margin.top + 18, "text-anchor": "end", class: "chart-label" }, "Diagonal = perfect prediction"));
+  svg.append(text({ x: margin.left + innerW / 2, y: 405, "text-anchor": "middle", class: "chart-label" }, t("chart.actualLabel")));
+  svg.append(text({ x: 16, y: margin.top + innerH / 2, transform: `rotate(-90 16 ${margin.top + innerH / 2})`, "text-anchor": "middle", class: "chart-label" }, t("chart.predictedLabel")));
+  svg.append(text({ x: margin.left + innerW - 4, y: margin.top + 18, "text-anchor": "end", class: "chart-label" }, t("chart.perfectPrediction")));
 }
 
 // ── SEGMENT TABS ─────────────────────────────────────────────────────────
@@ -404,7 +427,7 @@ function renderApproval() {
     svg.append(text({ x: x + width / 2, y: y(row.approvalRate) - 7, "text-anchor": "middle", class: "bar-label" }, fmtPct(row.approvalRate)));
     svg.append(text({ x: x + width / 2, y: 308, "text-anchor": "middle", class: "tick-label" }, row.band));
   });
-  svg.append(text({ x: margin.left + innerW / 2, y: 326, "text-anchor": "middle", class: "chart-label" }, "RiskScore band"));
+  svg.append(text({ x: margin.left + innerW / 2, y: 326, "text-anchor": "middle", class: "chart-label" }, t("chart.approvalBand")));
 }
 
 // ── CORRELATION PAIRS ────────────────────────────────────────────────────
@@ -474,9 +497,9 @@ function renderCalibration() {
     svg.append(g);
   });
 
-  svg.append(text({ x: margin.left + innerW / 2, y: 405, "text-anchor": "middle", class: "chart-label" }, "Mean Predicted RiskScore"));
-  svg.append(text({ x: 16, y: margin.top + innerH / 2, transform: `rotate(-90 16 ${margin.top + innerH / 2})`, "text-anchor": "middle", class: "chart-label" }, "Mean Actual RiskScore"));
-  svg.append(text({ x: margin.left + innerW - 4, y: margin.top + 18, "text-anchor": "end", class: "chart-label" }, "Dashed = perfect calibration"));
+  svg.append(text({ x: margin.left + innerW / 2, y: 405, "text-anchor": "middle", class: "chart-label" }, t("chart.meanPredicted")));
+  svg.append(text({ x: 16, y: margin.top + innerH / 2, transform: `rotate(-90 16 ${margin.top + innerH / 2})`, "text-anchor": "middle", class: "chart-label" }, t("chart.meanActual")));
+  svg.append(text({ x: margin.left + innerW - 4, y: margin.top + 18, "text-anchor": "end", class: "chart-label" }, t("chart.perfectCalibration")));
 }
 
 // ── COVERAGE STATS ───────────────────────────────────────────────────────
@@ -486,9 +509,9 @@ function renderCoverage() {
   if (!cov) return;
   const wrap = document.querySelector("#coverage-stats");
   const items = [
-    ["Residual SD", fmt.format(cov.residual_std)],
-    ["Within 1σ (expected 68.3%)", fmtPct(cov.pct_within_1sigma_68)],
-    ["Within 2σ (expected 95.4%)", fmtPct(cov.pct_within_2sigma_95)],
+    [t("cov.residualSD"), fmt.format(cov.residual_std)],
+    [t("cov.within1sigma"), fmtPct(cov.pct_within_1sigma_68)],
+    [t("cov.within2sigma"), fmtPct(cov.pct_within_2sigma_95)],
   ];
   items.forEach(([label, value]) => {
     const item = el("div", "param-item");
@@ -505,13 +528,13 @@ function renderStability() {
   if (!s) return;
   const wrap = document.querySelector("#stability-stats");
   const items = [
-    ["Error Skewness", fmt.format(s.error_skewness)],
-    ["Error Kurtosis", fmt.format(s.error_kurtosis)],
-    ["Normality p-value", s.error_normality_p_value < 0.001 ? "<0.001" : fmt.format(s.error_normality_p_value)],
-    ["Extreme Errors (>±10)", fmtPct(s.extreme_error_rate)],
-    ["Error Autocorr (lag-1)", fmt.format(s.error_autocorrelation_lag1)],
-    ["Below -5 pts", fmtPct(s.error_summary?.below_neg5_pct ?? 0)],
-    ["Above +5 pts", fmtPct(s.error_summary?.above_pos5_pct ?? 0)],
+    [t("stab.skewness"), fmt.format(s.error_skewness)],
+    [t("stab.kurtosis"), fmt.format(s.error_kurtosis)],
+    [t("stab.normality"), s.error_normality_p_value < 0.001 ? "<0.001" : fmt.format(s.error_normality_p_value)],
+    [t("stab.extreme"), fmtPct(s.extreme_error_rate)],
+    [t("stab.autocorr"), fmt.format(s.error_autocorrelation_lag1)],
+    [t("stab.belowNeg5"), fmtPct(s.error_summary?.below_neg5_pct ?? 0)],
+    [t("stab.abovePos5"), fmtPct(s.error_summary?.above_pos5_pct ?? 0)],
   ];
   items.forEach(([label, value]) => {
     const item = el("div", "param-item");
@@ -553,7 +576,7 @@ function renderFairnessBias(containerId, rows, labelKey = "group") {
       `${row.bias.toFixed(2)}${sig}`));
   });
 
-  svg.append(text({ x: margin.left, y: 262, class: "chart-label" }, "Negative = under-predicts  |  Positive = over-predicts  |  * = significant bias (p<0.05)"));
+  svg.append(text({ x: margin.left, y: 262, class: "chart-label" }, t("chart.negUnder")));
 }
 
 function renderFairnessEmployment() {
@@ -583,12 +606,13 @@ function renderFairnessVariance() {
     svg.append(svgEl("rect", { x: margin.left, y, width: x(row.error_std), height: barH, rx: 5, fill: palette.blue, opacity: 0.8 }));
     svg.append(text({ x: margin.left + x(row.error_std) + 7, y: y + barH / 2 + 5, class: "bar-label" }, row.error_std.toFixed(2)));
   });
-  svg.append(text({ x: margin.left, y: 180, class: "chart-label" }, "Error Std — higher = less reliable predictions"));
+  svg.append(text({ x: margin.left, y: 180, class: "chart-label" }, t("chart.errStd")));
 }
 
 // ── INIT ─────────────────────────────────────────────────────────────────
 
 function init() {
+  applyLang();
   renderSummary();
   renderMetricsTable();
   renderHorizontalMetricBars("#model-bars", data.metrics);
@@ -596,7 +620,7 @@ function init() {
   renderHeatmap("#rf-heatmap", data.tuning.randomForest);
   renderParams();
   renderScatter();
-  renderHistogram("#residual-hist", data.rfResidualHistogram, "Prediction error");
+  renderHistogram("#residual-hist", data.rfResidualHistogram, t("chart.errorLabel"));
   renderSegmentTabs();
   renderImportance();
   renderCorrelation();
@@ -608,6 +632,12 @@ function init() {
   renderFairnessEmployment();
   renderFairnessBankruptcy();
   renderFairnessVariance();
+
+  document.querySelector("#langToggle").addEventListener("click", () => {
+    const next = currentLang === "en" ? "zh" : "en";
+    localStorage.setItem("creditRiskLang", next);
+    location.reload();
+  });
 }
 
 init();
