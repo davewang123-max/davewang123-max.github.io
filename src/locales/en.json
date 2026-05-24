@@ -12,6 +12,8 @@
     "greeting": "Hello, I'm",
     "name": "Taowen Wang",
     "titles": [
+      "ADAS Test-Ready — 5 Yr Zero-Accident",
+      "Bilingual CLI-Proficient Driving Analyst",
       "Financial Mathematics & Statistics",
       "Data-Driven Business Insights",
       "Bilingual Cross-Border Strategist"
@@ -152,6 +154,31 @@
           "github": "",
           "demo": "/credit-risk-model/"
         }
+      },
+      {
+        "id": "adas-knowledge-base",
+        "title": "ADAS Sensor & Scenario Knowledge Base",
+        "period": "May 2026 – Present",
+        "type": "Self-Directed Learning",
+        "description": "Systematically building a knowledge base covering ADAS functional levels (SAE L0-L5), sensor modalities (camera, radar, LiDAR, ultrasonic), active safety features (AEB, FCW, BSD, LKA), and Euro NCAP test protocols. Designed to demonstrate rapid self-learning capability for Tesla Autopilot test operations — learning XRAY test management and applying structured analytical thinking to real-world driving scenarios.",
+        "tech": [
+          "ADAS Systems",
+          "Sensor Fusion",
+          "SAE J3016",
+          "Euro NCAP",
+          "AEB/FCW/BSD",
+          "XRAY"
+        ],
+        "metrics": [
+          {
+            "label": "Status",
+            "value": "Active"
+          }
+        ],
+        "links": {
+          "github": "",
+          "demo": ""
+        }
       }
     ]
   },
@@ -162,8 +189,12 @@
       "ml": "ML & Statistics",
       "viz": "Data Visualization",
       "business": "Business Analysis",
-      "communication": "Communication",
-      "finance": "Financial Modeling"
+      "communication": "English Communication",
+      "finance": "Financial Modeling",
+      "driving": "Driving Experience",
+      "cli": "CLI / Technical",
+      "detail": "Detail Observation",
+      "adas": "ADAS Knowledge"
     },
     "tools_title": "Technical Toolkit",
     "tools": [
@@ -180,6 +211,18 @@
         "level": 85
       },
       {
+        "name": "CLI (Git, Bash, npm, Claude Code)",
+        "level": 78
+      },
+      {
+        "name": "Multi-OS (macOS, Windows, Linux)",
+        "level": 78
+      },
+      {
+        "name": "MS Office (Word, Outlook, Excel)",
+        "level": 85
+      },
+      {
         "name": "Data Visualization (Power BI, Tableau)",
         "level": 80
       },
@@ -192,12 +235,12 @@
         "level": 70
       },
       {
-        "name": "C++",
-        "level": 55
+        "name": "React / TypeScript / Vite",
+        "level": 70
       },
       {
-        "name": "React / TypeScript / Vite",
-        "level": 65
+        "name": "Jira / GitHub Pages Deployment",
+        "level": 68
       }
     ],
     "languages_title": "Languages",
@@ -221,7 +264,11 @@
       "Risk Assessment",
       "Predictive Modeling",
       "Cross-Functional Support",
-      "ROI Analysis",
+      "ADAS Scenario Analysis",
+      "CLI Operations (Claude Code, Codex)",
+      "Multi-OS System Switching",
+      "GitHub Pages Deployment",
+      "Defensive Driving Strategy",
       "Client-Facing Communication"
     ]
   },

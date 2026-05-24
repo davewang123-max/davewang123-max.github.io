@@ -12,6 +12,8 @@
     "greeting": "你好，我是",
     "name": "王韬闻",
     "titles": [
+      "ADAS测试就绪 — 5年零事故驾驶",
+      "双语CLI熟练驾驶分析师",
       "金融数学与统计学",
       "数据驱动的商业洞察",
       "双语跨境策略顾问"
@@ -152,6 +154,31 @@
           "github": "",
           "demo": "/credit-risk-model/"
         }
+      },
+      {
+        "id": "adas-knowledge-base",
+        "title": "ADAS传感器与场景知识库",
+        "period": "2026年5月 – 至今",
+        "type": "自主学习项目",
+        "description": "系统构建ADAS知识库，涵盖功能分级（SAE L0-L5）、传感器模态（摄像头、毫米波雷达、激光雷达、超声波雷达）、主动安全功能（AEB、FCW、BSD、LKA）及Euro NCAP测试规程。旨在展示针对特斯拉Autopilot测试岗位的快速自学能力——学习XRAY测试管理工具，将结构化分析思维应用于真实驾驶场景。",
+        "tech": [
+          "ADAS系统",
+          "传感器融合",
+          "SAE J3016",
+          "Euro NCAP",
+          "AEB/FCW/BSD",
+          "XRAY"
+        ],
+        "metrics": [
+          {
+            "label": "状态",
+            "value": "进行中"
+          }
+        ],
+        "links": {
+          "github": "",
+          "demo": ""
+        }
       }
     ]
   },
@@ -162,8 +189,12 @@
       "ml": "机器学习与统计",
       "viz": "数据可视化",
       "business": "商业分析",
-      "communication": "沟通表达",
-      "finance": "金融建模"
+      "communication": "英语沟通",
+      "finance": "金融建模",
+      "driving": "驾驶经验",
+      "cli": "CLI/技术能力",
+      "detail": "细节观察力",
+      "adas": "ADAS知识"
     },
     "tools_title": "技术工具箱",
     "tools": [
@@ -180,6 +211,18 @@
         "level": 85
       },
       {
+        "name": "CLI (Git, Bash, npm, Claude Code)",
+        "level": 78
+      },
+      {
+        "name": "多系统 (macOS, Windows, Linux)",
+        "level": 78
+      },
+      {
+        "name": "MS Office (Word, Outlook, Excel)",
+        "level": 85
+      },
+      {
         "name": "数据可视化 (Power BI, Tableau)",
         "level": 80
       },
@@ -192,12 +235,12 @@
         "level": 70
       },
       {
-        "name": "C++",
-        "level": 55
+        "name": "React / TypeScript / Vite",
+        "level": 70
       },
       {
-        "name": "React / TypeScript / Vite",
-        "level": 65
+        "name": "Jira / GitHub Pages 部署",
+        "level": 68
       }
     ],
     "languages_title": "语言能力",
@@ -221,7 +264,11 @@
       "风险评估",
       "预测建模",
       "跨职能协作",
-      "ROI分析",
+      "ADAS场景分析",
+      "CLI操作 (Claude Code, Codex)",
+      "多系统切换",
+      "GitHub Pages 部署",
+      "防御性驾驶策略",
       "客户沟通"
     ]
   },
