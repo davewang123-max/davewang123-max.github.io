@@ -47,6 +47,12 @@ export default function Navbar() {
               {t(`nav.${key}`)}
             </Link>
           ))}
+          <a
+            href="/driving/"
+            className="text-sm font-medium text-accent-600 hover:text-accent-700 transition-colors"
+          >
+            {t('nav.driving')}
+          </a>
           <LangToggle />
         </div>
 
@@ -76,6 +82,13 @@ export default function Navbar() {
               {t(`nav.${key}`)}
             </Link>
           ))}
+          <a
+            href="/driving/"
+            onClick={() => setMenuOpen(false)}
+            className="text-sm font-medium text-accent-600 hover:text-accent-700 transition-colors py-1"
+          >
+            {t('nav.driving')}
+          </a>
           <div className="pt-2">
             <LangToggle />
           </div>
