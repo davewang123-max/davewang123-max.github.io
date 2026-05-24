@@ -192,13 +192,13 @@
   footer { text-align:center; padding:3rem 0; border-top:1px solid var(--border-subtle); color:var(--text-muted); font-size:0.7rem; line-height:1.6; }
 
   /* ── Language visibility ── */
-  /* Default: show English, hide Chinese */
-  .lang-zh, .lang-zh-i { display: none; }
-  /* Chinese mode: hide English, show Chinese (revert preserves native display type) */
+  /* Default: English visible, Chinese invisible */
+  .lang-zh, .lang-zh-i { display: none !important; }
+  /* Chinese mode: English invisible, Chinese visible */
   html.lang-zh .lang-en,
-  html.lang-zh .lang-en-i { display: none; }
-  html.lang-zh .lang-zh  { display: revert; }
-  html.lang-zh .lang-zh-i { display: revert; }
+  html.lang-zh .lang-en-i { display: none !important; }
+  html.lang-zh .lang-zh,
+  html.lang-zh .lang-zh-i { display: revert !important; }
 
   @media(max-width:768px) {
     .hero-grid, .scenario-grid, .dual-grid { grid-template-columns:1fr; }
@@ -602,9 +602,11 @@
 <script>
 // ── Language Switch ──
 function switchLang(lang) {
-  document.documentElement.className = lang === 'zh' ? 'lang-zh' : '';
-  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-  document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+  try {
+    document.documentElement.className = lang === 'zh' ? 'lang-zh' : '';
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+  } catch(e) { console.error('switchLang error:', e); }
 }
 
 // ── Radar Chart ──
