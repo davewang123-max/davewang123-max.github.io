@@ -581,12 +581,12 @@ function renderFairnessBias(containerId, rows, labelKey = "group") {
 
 function renderFairnessEmployment() {
   const rows = data.fairness?.["Employment Status"];
-  renderFairnessBias("#fairness-employment", rows);
+  renderFairnessBias("fairness-employment", rows);
 }
 
 function renderFairnessBankruptcy() {
   const rows = data.fairness?.["Bankruptcy History"];
-  renderFairnessBias("#fairness-bankruptcy", rows);
+  renderFairnessBias("fairness-bankruptcy", rows);
 }
 
 function renderFairnessVariance() {
