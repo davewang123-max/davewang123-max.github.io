@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>驾驶哲学 — Driving Philosophy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #080c10;
+    --bg-card: #11161d;
+    --bg-card-hover: #161c26;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-active: rgba(255,255,255,0.12);
+    --text-primary: #e8ecf1;
+    --text-secondary: #8897a8;
+    --text-muted: #546170;
+    --red-tesla: #e31937;
+    --cyan-data: #00e5ff;
+    --amber-warn: #f59e0b;
+    --green-safe: #10b981;
+    --purple-insight: #a78bfa;
+    --orange-ebike: #f97316;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 20%, rgba(0,229,255,0.03) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(227,25,55,0.02) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 50% 40%, rgba(249,115,22,0.02) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L31 30 L60 30 L31 31 L30 60 L29 31 L0 30 L29 30 Z' fill='rgba(255,255,255,0.015)'/%3E%3C/svg%3E");
+  }
+
+  .container { max-width:1100px; margin:0 auto; padding:0 2rem; position:relative; z-index:1; }
+
+  /* ── Lang Toggle ── */
+  .lang-toggle {
+    position:fixed; top:16px; right:2rem; z-index:200;
+    display:flex; gap:0; background:var(--bg-card); border:1px solid var(--border-subtle);
+    border-radius:8px; overflow:hidden; font-size:0.7rem;
+  }
+  .lang-toggle button {
+    padding:0.45rem 0.8rem; border:none; cursor:pointer; font-family:'IBM Plex Sans','Noto Sans SC',sans-serif;
+    font-weight:600; letter-spacing:0.04em; transition:all 0.2s;
+    background:transparent; color:var(--text-muted);
+  }
+  .lang-toggle button.active { background:var(--red-tesla); color:#fff; }
+
+  /* ── Nav ── */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background: rgba(8,12,16,0.85); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border-subtle); padding:0 2rem;
+  }
+  .nav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:56px; }
+  .nav-logo { font-family:'Orbitron',monospace; font-size:0.8rem; font-weight:700; letter-spacing:0.15em; color:var(--text-primary); text-decoration:none; }
+  .nav-logo span { color:var(--red-tesla); }
+  .nav-links { display:flex; gap:1.5rem; list-style:none; flex-wrap:wrap; }
+  .nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.72rem; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; transition:color 0.2s; white-space:nowrap; }
+  .nav-links a:hover { color:var(--text-primary); }
+
+  section { padding:5rem 0; position:relative; z-index:1; }
+  .section-label { font-family:'Orbitron',monospace; font-size:0.62rem; letter-spacing:0.2em; color:var(--red-tesla); text-transform:uppercase; margin-bottom:0.6rem; }
+  .section-title { font-family:'Orbitron',monospace; font-size:clamp(1.4rem, 3.5vw, 2rem); font-weight:700; letter-spacing:-0.02em; line-height:1.15; margin-bottom:0.8rem; }
+  .section-desc { color:var(--text-secondary); font-size:0.95rem; max-width:640px; line-height:1.7; }
+
+  /* ── Hero ── */
+  #hero { min-height:100vh; display:flex; align-items:center; padding-top:80px; }
+  .hero-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+  .hero-stat-row { display:flex; gap:1.5rem; margin-top:2rem; flex-wrap:wrap; }
+  .hero-stat {
+    background:var(--bg-card); border:1px solid var(--border-subtle);
+    border-radius:12px; padding:1rem 1.25rem; text-align:center; min-width:110px;
+    flex:1;
+  }
+  .hero-stat .num {
+    font-family:'Orbitron',monospace; font-size:1.6rem; font-weight:900;
+    background:linear-gradient(135deg, var(--cyan-data), #fff);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .hero-stat .label { color:var(--text-muted); font-size:0.65rem; text-transform:uppercase; letter-spacing:0.06em; margin-top:0.2rem; }
+  .hero-viz {
+    position:relative; aspect-ratio:1;
+    background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:24px;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .hero-viz canvas { width:92%; height:92%; }
+
+  /* ── Data Cards ── */
+  .data-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.85rem; margin-top:2rem; }
+  .data-card {
+    background:var(--bg-card); border:1px solid var(--border-subtle);
+    border-radius:14px; padding:1.35rem; transition:all 0.3s;
+  }
+  .data-card:hover { background:var(--bg-card-hover); border-color:var(--border-active); transform:translateY(-2px); }
+  .data-card .card-icon { font-size:1.3rem; margin-bottom:0.6rem; }
+  .data-card .card-value { font-family:'JetBrains Mono',monospace; font-size:1.4rem; font-weight:700; }
+  .data-card .card-label { color:var(--text-secondary); font-size:0.78rem; margin-top:0.2rem; line-height:1.5; }
+  .data-card .card-source { color:var(--text-muted); font-size:0.62rem; margin-top:0.6rem; font-style:italic; }
+
+  .val-pos { color:var(--green-safe); }
+  .val-neg { color:var(--red-tesla); }
+  .val-neu { color:var(--cyan-data); }
+  .val-amb { color:var(--amber-warn); }
+  .val-ebk { color:var(--orange-ebike); }
+
+  /* ── Dual Perspective ── */
+  .dual-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:2rem; }
+  .dual-card {
+    background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:16px; padding:1.5rem;
+  }
+  .dual-card.driver { border-left:3px solid var(--red-tesla); }
+  .dual-card.rider { border-left:3px solid var(--orange-ebike); }
+  .dual-card h4 { font-family:'Orbitron',monospace; font-size:0.7rem; letter-spacing:0.1em; margin-bottom:1rem; }
+  .dual-card.driver h4 { color:var(--red-tesla); }
+  .dual-card.rider h4 { color:var(--orange-ebike); }
+  .dual-card ul { list-style:none; }
+  .dual-card li { padding:0.5rem 0; border-bottom:1px solid var(--border-subtle); font-size:0.82rem; color:var(--text-secondary); line-height:1.5; }
+  .dual-card li:last-child { border-bottom:none; }
+  .dual-card li::before { content:'> '; color:var(--text-muted); font-family:'JetBrains Mono',monospace; font-size:0.7rem; }
+
+  /* ── Comparison Table ── */
+  .compare-table { width:100%; border-collapse:collapse; margin-top:1.5rem; font-size:0.8rem; }
+  .compare-table th {
+    text-align:left; padding:0.85rem 1rem; font-family:'Orbitron',monospace;
+    font-size:0.6rem; letter-spacing:0.1em; color:var(--text-muted); text-transform:uppercase;
+    border-bottom:1px solid var(--border-subtle);
+  }
+  .compare-table td { padding:0.85rem 1rem; border-bottom:1px solid var(--border-subtle); vertical-align:top; line-height:1.5; }
+  .compare-table tr:hover td { background:rgba(255,255,255,0.015); }
+
+  /* ── Scenario Bars ── */
+  .scenario-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; margin-top:2rem; }
+  .scenario-bars { display:flex; flex-direction:column; gap:0.85rem; }
+  .scenario-bar-item { }
+  .scenario-bar-label { display:flex; justify-content:space-between; font-size:0.78rem; margin-bottom:0.3rem; }
+  .scenario-bar-track { height:7px; background:var(--bg-deep); border-radius:4px; overflow:hidden; }
+  .scenario-bar-fill { height:100%; border-radius:4px; transition:width 1.5s ease-out; }
+  .fill-cut { background:var(--red-tesla); }
+  .fill-ebike { background:var(--amber-warn); }
+  .fill-intersect { background:var(--purple-insight); }
+  .fill-vru { background:var(--orange-ebike); }
+  .fill-other { background:var(--text-muted); }
+
+  /* ── Timeline ── */
+  .timeline { position:relative; padding-left:2rem; margin-top:2rem; }
+  .timeline::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:2px;
+    background:linear-gradient(to bottom, var(--orange-ebike), var(--red-tesla), var(--cyan-data), var(--green-safe));
+  }
+  .timeline-item { position:relative; margin-bottom:2rem; padding-left:1.8rem; }
+  .timeline-item::before {
+    content:''; position:absolute; left:-2.1rem; top:0.3rem;
+    width:11px; height:11px; border-radius:50%; background:var(--bg-card);
+    border:2px solid var(--cyan-data);
+  }
+  .timeline-year { font-family:'Orbitron',monospace; font-size:0.65rem; color:var(--cyan-data); letter-spacing:0.1em; margin-bottom:0.2rem; }
+  .timeline-title { font-weight:600; font-size:0.95rem; margin-bottom:0.3rem; }
+  .timeline-desc { color:var(--text-secondary); font-size:0.8rem; line-height:1.6; }
+
+  /* ── Quote ── */
+  .quote-block {
+    border-left:3px solid var(--red-tesla); padding:1.25rem 1.75rem;
+    background:linear-gradient(90deg, rgba(227,25,55,0.06) 0%, transparent 100%);
+    margin:2.5rem 0; border-radius:0 8px 8px 0;
+  }
+  .quote-block p { font-size:1.05rem; font-weight:300; line-height:1.7; font-style:italic; }
+  .quote-block .attribution { color:var(--text-muted); font-size:0.7rem; margin-top:0.6rem; font-style:normal; }
+
+  /* ── CTA ── */
+  .cta-block {
+    background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:20px;
+    padding:2.5rem; text-align:center; margin-top:2.5rem;
+  }
+  .cta-block h3 { font-family:'Orbitron',monospace; font-size:1.2rem; margin-bottom:0.6rem; }
+  .cta-block p { color:var(--text-secondary); max-width:480px; margin:0 auto 1.25rem; font-size:0.9rem; }
+
+  /* ── Footer ── */
+  footer { text-align:center; padding:3rem 0; border-top:1px solid var(--border-subtle); color:var(--text-muted); font-size:0.7rem; line-height:1.6; }
+
+  /* ── Language visibility ── */
+  /* Default: show English, hide Chinese */
+  .lang-zh, .lang-zh-i { display: none; }
+  /* Chinese mode: hide English, show Chinese (revert preserves native display type) */
+  html.lang-zh .lang-en,
+  html.lang-zh .lang-en-i { display: none; }
+  html.lang-zh .lang-zh  { display: revert; }
+  html.lang-zh .lang-zh-i { display: revert; }
+
+  @media(max-width:768px) {
+    .hero-grid, .scenario-grid, .dual-grid { grid-template-columns:1fr; }
+    section { padding:3rem 0; }
+    .nav-links { display:none; }
+    .lang-toggle { top:60px; right:1rem; }
+    .hero-stat-row { gap:0.6rem; }
+    .hero-stat { min-width:80px; padding:0.8rem; }
+    .hero-stat .num { font-size:1.2rem; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .reveal { animation:fadeUp 0.65s ease-out backwards; }
+  .reveal-d1 { animation-delay:0.08s; }
+  .reveal-d2 { animation-delay:0.16s; }
+  .reveal-d3 { animation-delay:0.24s; }
+  .reveal-d4 { animation-delay:0.32s; }
+</style>
+</head>
+<body>
+
+<div class="lang-toggle">
+  <button id="btn-en" class="active" onclick="switchLang('en')">EN</button>
+  <button id="btn-zh" onclick="switchLang('zh')">中文</button>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><span>&#9670;</span> DRIVING DOSSIER</a>
+    <ul class="nav-links">
+      <li><a href="#data"><span class="lang-en-i">Metrics</span><span class="lang-zh-i">数据</span></a></li>
+      <li><a href="#duality"><span class="lang-en-i">Dual Lens</span><span class="lang-zh-i">双重视角</span></a></li>
+      <li><a href="#scenarios"><span class="lang-en-i">Scenarios</span><span class="lang-zh-i">场景库</span></a></li>
+      <li><a href="#compare"><span class="lang-en-i">China vs US</span><span class="lang-zh-i">中美对比</span></a></li>
+      <li><a href="#journey"><span class="lang-en-i">Journey</span><span class="lang-zh-i">历程</span></a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="section-label reveal">// Driving.Dossier v2.0</div>
+        <h1 class="section-title reveal reveal-d1">
+          <span class="lang-en-i">Two Wheels. Four Wheels.<br>Two Countries.</span>
+          <span class="lang-zh-i">两轮。四轮。<br>两个国家。</span>
+        </h1>
+        <p class="section-desc reveal reveal-d2 lang-en">
+          Five years behind the wheel. Four years on e-bike handlebars.
+          China&#8217;s chaos. America&#8217;s order. 30,000 km driving.
+          4,000+ km riding. Zero accidents. Every near-miss is a lesson.
+          Every perspective shift is data for autonomous driving.
+        </p>
+        <p class="section-desc reveal reveal-d2 lang-zh">
+          五年方向盘后的司机。四年电动车把手上的骑手。
+          中国的混沌。美国的秩序。3万公里驾驶。
+          4000+公里骑行。零事故。每一次差点碰撞都是一堂课。
+          每一次视角转换，都是自动驾驶需要的数据。
+        </p>
+        <div class="hero-stat-row reveal reveal-d3">
+          <div class="hero-stat">
+            <div class="num" id="counter-km">0</div>
+            <div class="label lang-en">Km Driven</div>
+            <div class="label lang-zh">驾驶里程</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" style="background:linear-gradient(135deg, var(--green-safe), #fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div>
+            <div class="label lang-en">Accidents</div>
+            <div class="label lang-zh">事故</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" style="background:linear-gradient(135deg, var(--orange-ebike), #fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" id="counter-ebike">0</div>
+            <div class="label lang-en">Km on E-bike</div>
+            <div class="label lang-zh">电动车里程</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" style="background:linear-gradient(135deg, var(--amber-warn), #fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" id="counter-nearmiss">0</div>
+            <div class="label lang-en">Near-Misses</div>
+            <div class="label lang-zh">差点碰撞</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-viz reveal reveal-d4">
+        <canvas id="radarCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ KEY METRICS ═══════════ -->
+<section id="data">
+  <div class="container">
+    <div class="section-label">// 01</div>
+    <h2 class="section-title"><span class="lang-en-i">The Composite Profile</span><span class="lang-zh-i">复合驾驶档案</span></h2>
+    <p class="section-desc lang-en">Not just a driver. Not just a rider. A rare dual-perspective road user with experience in both China and the United States.</p>
+    <p class="section-desc lang-zh">不只是驾驶员。不只是骑行者。一个罕见的中美双市场双视角道路使用者。</p>
+
+    <div class="data-grid">
+      <div class="data-card">
+        <div class="card-icon">&#x1f3eb;</div>
+        <div class="card-value val-neu"><span class="lang-en-i">C1 Licensed</span><span class="lang-zh-i">C1驾照</span></div>
+        <div class="card-label lang-en">All 4 PRC driving exam subjects passed perfectly in 2 months</div>
+        <div class="card-label lang-zh">中国驾考4个科目2个月内一次性满分通过</div>
+      </div>
+      <div class="data-card">
+        <div class="card-icon">&#x1f697;</div>
+        <div class="card-value val-neu">5 <span class="lang-en-i">Years</span><span class="lang-zh-i">年</span></div>
+        <div class="card-label lang-en">Continuous driving across northern Chinese urban environments</div>
+        <div class="card-label lang-zh">中国北方城市持续驾驶经验</div>
+      </div>
+      <div class="data-card">
+        <div class="card-icon">&#x1f4cf;</div>
+        <div class="card-value val-neu">30,000+ km</div>
+        <div class="card-label lang-en">Mixed highway, arterial, and dense urban driving. Zero accidents.</div>
+        <div class="card-label lang-zh">高速公路/主干道/密集城区混合驾驶。零事故。</div>
+        <div class="card-source lang-en">Meets Tesla requirement: 1 year accident-free</div>
+        <div class="card-source lang-zh">符合特斯拉要求：1年内无事故</div>
+      </div>
+      <div class="data-card">
+        <div class="card-icon">&#x1f6f5;</div>
+        <div class="card-value val-ebk">4,000+ km</div>
+        <div class="card-label lang-en">E-bike & bicycle commuting — 6 km daily at UCSB for 4 years, plus Chinese e-bike experience</div>
+        <div class="card-label lang-zh">电动车与自行车通勤——UCSB 4年每日6公里，加上中国电动车经验</div>
+      </div>
+      <div class="data-card">
+        <div class="card-icon">&#x26a0;&#xfe0f;</div>
+        <div class="card-value val-amb">~2,000+</div>
+        <div class="card-label lang-en">Estimated near-miss events — as driver AND as rider, in China AND the US</div>
+        <div class="card-label lang-zh">估计差点碰撞事件——作为驾驶员和骑手，在中国和美国</div>
+      </div>
+      <div class="data-card">
+        <div class="card-icon">&#x1f310;</div>
+        <div class="card-value val-neu"><span class="lang-en-i">4-Quadrant</span><span class="lang-zh-i">四象限</span></div>
+        <div class="card-label lang-en">Driver&#8202;&#215;&#8202;China, Driver&#8202;&#215;&#8202;US, Rider&#8202;&#215;&#8202;China, Rider&#8202;&#215;&#8202;US</div>
+        <div class="card-label lang-zh">驾驶员&#8202;&#215;&#8202;中国，驾驶员&#8202;&#215;&#8202;美国，骑手&#8202;&#215;&#8202;中国，骑手&#8202;&#215;&#8202;美国</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DUAL PERSPECTIVE ═══════════ -->
+<section id="duality">
+  <div class="container">
+    <div class="section-label">// 02</div>
+    <h2 class="section-title"><span class="lang-en-i">The Dual Lens</span><span class="lang-zh-i">双重镜头</span></h2>
+    <p class="section-desc lang-en">The same road, experienced from two completely different risk profiles. This is the empathy that autonomous driving engineers need.</p>
+    <p class="section-desc lang-zh">同一条路，从两种完全不同的风险视角去体验。这是自动驾驶工程师所需要的共情能力。</p>
+
+    <div class="dual-grid">
+      <div class="dual-card driver">
+        <h4>&#x1f697; <span class="lang-en-i">AS A DRIVER</span><span class="lang-zh-i">作为驾驶员</span></h4>
+        <ul>
+          <li><span class="lang-en-i">I know the blind spots where e-bikes hide</span><span class="lang-zh-i">我知道电动车隐藏的盲区在哪里</span></li>
+          <li><span class="lang-en-i">I anticipate the sudden swerve — rider checking phone, one hand on the bar</span><span class="lang-zh-i">我能预判突然的转向——骑手在看手机，单手扶把</span></li>
+          <li><span class="lang-en-i">I feel the stress of "any mistake could kill someone"</span><span class="lang-zh-i">我承受着"任何失误都可能导致有人死亡"的压力</span></li>
+          <li><span class="lang-en-i">I have internalized Chinese "scrambling" right-of-way logic</span><span class="lang-zh-i">我已内化中国式"争抢"路权逻辑</span></li>
+          <li><span class="lang-en-i">I can detect lane-cut intent 2-3 seconds before it happens</span><span class="lang-zh-i">我能在加塞发生前2-3秒察觉到意图</span></li>
+          <li><span class="lang-en-i">I understand why Chinese drivers honk — it's communication, not aggression</span><span class="lang-zh-i">我理解中国司机为什么按喇叭——是沟通，不是攻击</span></li>
+        </ul>
+      </div>
+      <div class="dual-card rider">
+        <h4>&#x1f6f5; <span class="lang-en-i">AS AN E-BIKE RIDER</span><span class="lang-zh-i">作为电动车骑手</span></h4>
+        <ul>
+          <li><span class="lang-en-i">I know what it feels like when a car "doesn't see you" at an intersection</span><span class="lang-zh-i">我知道在路口被汽车"没看见"是什么感觉</span></li>
+          <li><span class="lang-en-i">I've been forced off the road by right-turning cars that never checked mirrors</span><span class="lang-zh-i">我被不查看后视镜就右转的汽车逼出过道路</span></li>
+          <li><span class="lang-en-i">I understand why riders weave — potholes, glass, and parked cars that cars don't notice</span><span class="lang-zh-i">我理解为什么骑手要绕行——坑洼、碎玻璃、汽车注意不到的违停车</span></li>
+          <li><span class="lang-en-i">At UCSB, I commuted 6 km daily — bike lanes, roundabouts, campus traffic</span><span class="lang-zh-i">在UCSB，我每天骑行6公里——自行车道、环岛、校园交通</span></li>
+          <li><span class="lang-en-i">In China, I dodged delivery riders who run reds while checking phones</span><span class="lang-zh-i">在中国，我躲避边看手机边闯红灯的外卖骑手</span></li>
+          <li><span class="lang-en-i">I am the Vulnerable Road User that autonomous cars are programmed to protect</span><span class="lang-zh-i">我就是自动驾驶汽车被编程要去保护的弱势道路使用者</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <p class="lang-en">"You don't truly understand a near-miss until you've been on both sides of it. As a driver, it's a jolt of adrenaline. As a rider, it's your life flashing before your eyes. That difference — that asymmetry of consequence — is what every autonomous driving system must internalize."</p>
+      <p class="lang-zh">"直到你从双方的角度都经历过差点碰撞，你才算真正理解它。作为驾驶员，那是肾上腺素飙升的一瞬间。作为骑手，那是你一生的画面在眼前闪过。这种差异——这种后果的不对称性——是每个自动驾驶系统都必须内化的。"</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SCENARIOS ═══════════ -->
+<section id="scenarios">
+  <div class="container">
+    <div class="section-label">// 03</div>
+    <h2 class="section-title"><span class="lang-en-i">The Near-Miss Database</span><span class="lang-zh-i">差点碰撞数据库</span></h2>
+    <p class="section-desc lang-en">Personally logged edge cases, classified by failure mode. Each bar represents a scenario family that FSD must master for China.</p>
+    <p class="section-desc lang-zh">基于个人经历记录和分类的边缘案例。每一根柱子代表FSD在中国必须掌握的一个场景家族。</p>
+
+    <div class="scenario-grid">
+      <div class="scenario-bars">
+        <div class="scenario-bar-item">
+          <div class="scenario-bar-label"><span>&#x1f697; <span class="lang-en-i">Cut-in / Forced Merge</span><span class="lang-zh-i">加塞 / 强行并线</span></span><span style="font-family:'JetBrains Mono',monospace;color:var(--red-tesla);">32%</span></div>
+          <div class="scenario-bar-track"><div class="scenario-bar-fill fill-cut" style="width:0%" data-width="32%"></div></div>
+        </div>
+        <div class="scenario-bar-item">
+          <div class="scenario-bar-label"><span>&#x1f6f5; <span class="lang-en-i">E-bike / Pedestrian Intrusion</span><span class="lang-zh-i">电动车 / 行人突然闯入</span></span><span style="font-family:'JetBrains Mono',monospace;color:var(--amber-warn);">25%</span></div>
+          <div class="scenario-bar-track"><div class="scenario-bar-fill fill-ebike" style="width:0%" data-width="25%"></div></div>
+        </div>
+        <div class="scenario-bar-item">
+          <div class="scenario-bar-label"><span>&#x1f6a6; <span class="lang-en-i">Intersection Violation</span><span class="lang-zh-i">路口违规</span></span><span style="font-family:'JetBrains Mono',monospace;color:var(--purple-insight);">18%</span></div>
+          <div class="scenario-bar-track"><div class="scenario-bar-fill fill-intersect" style="width:0%" data-width="18%"></div></div>
+        </div>
+        <div class="scenario-bar-item">
+          <div class="scenario-bar-label"><span>&#x1f6a4; <span class="lang-en-i">VRU Near-Miss (rider perspective)</span><span class="lang-zh-i">弱势道路使用者险情（骑手视角）</span></span><span style="font-family:'JetBrains Mono',monospace;color:var(--orange-ebike);">15%</span></div>
+          <div class="scenario-bar-track"><div class="scenario-bar-fill fill-vru" style="width:0%" data-width="15%"></div></div>
+        </div>
+        <div class="scenario-bar-item">
+          <div class="scenario-bar-label"><span>&#x2753; <span class="lang-en-i">Other / Combined Factors</span><span class="lang-zh-i">其他 / 复合因素</span></span><span style="font-family:'JetBrains Mono',monospace;color:var(--text-muted);">10%</span></div>
+          <div class="scenario-bar-track"><div class="scenario-bar-fill fill-other" style="width:0%" data-width="10%"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="data-card" style="margin-bottom:0.85rem;">
+          <div class="card-icon">&#x1f4a1;</div>
+          <div class="card-label" style="color:var(--text-primary);font-size:0.85rem;line-height:1.6;">
+            <span class="lang-en"><strong>Why this matters for Tesla FSD:</strong> The 15% "VRU perspective" bar is unique — it comes from being ON the e-bike when a car nearly hit me. I know what the car did wrong because I've made the same mistake as a driver. That feedback loop is impossible to get from driving data alone.</span>
+            <span class="lang-zh"><strong>为什么这对特斯拉FSD很重要：</strong>15%的"弱势道路使用者视角"是独一无二的——它来自于我骑电动车时差点被汽车撞到的经历。我知道汽车做错了什么，因为作为驾驶员我也犯过同样的错。这种反馈循环是仅靠驾驶数据无法获得的。</span>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="card-icon">&#x1f4ac;</div>
+          <div class="card-label" style="color:var(--text-secondary);font-size:0.78rem;line-height:1.7;">
+            <span class="lang-en">"At UCSB, I rode the same 6 km loop every day for four years. I learned exactly where cars roll through stop signs, which roundabout entries drivers misjudge, and how a cyclist's trajectory looks to a car's blind spot sensor. Then I went back to China and experienced the chaos from the handlebars of an e-bike weaving through traffic that makes Santa Barbara look like a utopia. I've been the invisible rider and the frustrated driver. That's the loop."</span>
+            <span class="lang-zh">"在UCSB，我四年如一日每天骑行同样的6公里路线。我精确地知道哪些路口汽车会违规滑过Stop Sign，哪个环岛入口司机会判断失误，以及一个骑手的轨迹在汽车盲区传感器中是什么样子。然后我回到中国，在电动车上体验了穿行于车流中的混乱——相比之下圣巴巴拉的交通简直是乌托邦。我曾是隐形的骑手，也曾是沮丧的司机。这就是那个反馈循环。"</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CHINA vs US TABLE ═══════════ -->
+<section id="compare">
+  <div class="container">
+    <div class="section-label">// 04</div>
+    <h2 class="section-title"><span class="lang-en-i">China vs. United States</span><span class="lang-zh-i">中国 vs 美国</span></h2>
+    <p class="section-desc lang-en">The same human, two different road cultures. Every difference is a parameter FSD must learn to switch.</p>
+    <p class="section-desc lang-zh">同一个人，两种道路文化。每一个差异都是FSD必须学会切换的参数。</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th><span class="lang-en-i">Dimension</span><span class="lang-zh-i">维度</span></th><th><span style="color:var(--red-tesla);">&#x1f1e8;&#x1f1f3; China</span></th><th><span style="color:var(--cyan-data);">&#x1f1fa;&#x1f1f8; United States</span></th><th style="width:100px;"><span class="lang-en-i">Source</span><span class="lang-zh-i">来源</span></th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><span class="lang-en-i">Fatalities / 100K vehicles</span><span class="lang-zh-i">每10万辆车死亡率</span></strong></td>
+          <td class="val-neg">83.6</td><td class="val-pos">12.8</td>
+          <td style="font-size:0.6rem;color:var(--text-muted);">Atchley et al., <em>Safety Science</em> 2014</td>
+        </tr>
+        <tr>
+          <td><strong><span class="lang-en-i">Lane discipline</span><span class="lang-zh-i">车道纪律</span></strong></td>
+          <td><span class="lang-en-i">Flexible/discretionary — "scrambling" culture</span><span class="lang-zh-i">灵活/自由裁量——"争抢"文化</span></td>
+          <td><span class="lang-en-i">Strict — "rigorously adhere to lane markings"</span><span class="lang-zh-i">严格遵守——"严格沿车道标线行驶"</span></td>
+          <td style="font-size:0.6rem;color:var(--text-muted);">IEEE 2025</td>
+        </tr>
+        <tr>
+          <td><strong><span class="lang-en-i">Following distance</span><span class="lang-zh-i">跟车距离</span></strong></td>
+          <td><span class="lang-en-i">Tight to prevent cut-ins; headway 8-35% shorter</span><span class="lang-zh-i">拥堵时极近防加塞；间距短8-35%</span></td>
+          <td><span class="lang-en-i">"Considerable distances" — personal space norm</span><span class="lang-zh-i">"较大距离"——个人空间是文化规范</span></td>
+          <td style="font-size:0.6rem;color:var(--text-muted);">Zhejiang Univ. 2026</td>
+        </tr>
+        <tr>
+          <td><strong><span class="lang-en-i">E-bike threat</span><span class="lang-zh-i">电动车威胁</span></strong></td>
+          <td class="val-neg"><span class="lang-en-i">3.5B units; 37% hit pedestrians; deaths +5.85%/yr</span><span class="lang-zh-i">3.5亿辆；37%碰撞行人；死亡+5.85%/年</span></td>
+          <td><span class="lang-en-i">Minimal — separate infrastructure</span><span class="lang-zh-i">极少——独立基础设施</span></td>
+          <td style="font-size:0.6rem;color:var(--text-muted);"><span class="lang-en-i">China Stats YB / JSR 2025</span><span class="lang-zh-i">中国统计年鉴 / JSR 2025</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="lang-en-i">Horn meaning</span><span class="lang-zh-i">鸣笛含义</span></strong></td>
+          <td><span class="lang-en-i">Multi-function: warning, greeting, frustration, negotiation</span><span class="lang-zh-i">多功能：警告、打招呼、表达不满、协商路权</span></td>
+          <td><span class="lang-en-i">Emergency / danger alert only</span><span class="lang-zh-i">仅紧急/危险警告</span></td>
+          <td style="font-size:0.6rem;color:var(--text-muted);">IEEE 2025</td>
+        </tr>
+        <tr>
+          <td><strong><span class="lang-en-i">Cultural orientation</span><span class="lang-zh-i">文化取向</span></strong></td>
+          <td><span class="lang-en-i">Competitive scrambling; high risk tolerance</span><span class="lang-zh-i">竞争性争抢；高风险容忍</span></td>
+          <td><span class="lang-en-i">Individual freedom; moderate risk tolerance</span><span class="lang-zh-i">个人自由；中等风险容忍</span></td>
+          <td style="font-size:0.6rem;color:var(--text-muted);">Atchley et al., 2014</td>
+        </tr>
+        <tr>
+          <td><strong><span class="lang-en-i">Behavioral plasticity</span><span class="lang-zh-i">行为可塑性</span></strong></td>
+          <td colspan="2" style="text-align:center;color:var(--cyan-data);">
+            <span class="lang-en-i">Same driver changes behavior with context — infrastructure + norms, not personality</span>
+            <span class="lang-zh-i">同一驾驶员随环境改变行为——是基础设施+规范，不是性格</span>
+          </td>
+          <td style="font-size:0.6rem;color:var(--text-muted);"><span class="lang-en-i">China Quality Daily / OSU</span><span class="lang-zh-i">中国质量日报 / OSU</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="quote-block">
+      <p class="lang-en">"China has an emerging driver population and cultural values that result in aberrant driving behaviors and 'scrambling' to gain the right of way, producing a high number of crashes."</p>
+      <p class="lang-zh">"中国有一个新兴的驾驶员群体，其文化价值观导致异常驾驶行为和'争抢'路权，产生极高的碰撞率。"</p>
+      <div class="attribution">— Atchley, Shi & Yamamoto, <em>Safety Science</em>, 2014</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ JOURNEY ═══════════ -->
+<section id="journey">
+  <div class="container">
+    <div class="section-label">// 05</div>
+    <h2 class="section-title"><span class="lang-en-i">From Dreamer to Defender</span><span class="lang-zh-i">从追梦者到防御者</span></h2>
+    <p class="section-desc lang-en">A lifetime on wheels, leading to one mission: making autonomous driving safer for everyone on the road.</p>
+    <p class="section-desc lang-zh">一辈子的轮上生活，通向一个使命：让自动驾驶对路上每个人都更安全。</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year"><span class="lang-en-i">CHILDHOOD</span><span class="lang-zh-i">童年</span></div>
+        <div class="timeline-title lang-en">The Dream</div><div class="timeline-title lang-zh">那个梦想</div>
+        <div class="timeline-desc lang-en">Fascinated by cars. Not just speed — <em>control</em>. Understanding how a machine responds to human input. Dreamed of the day I'd hold a steering wheel.</div>
+        <div class="timeline-desc lang-zh">对汽车着迷。不只是速度——是<em>操控感</em>。理解机器如何响应人类的输入。梦想着有一天握上方向盘。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2019</div>
+        <div class="timeline-title lang-en">Perfect Exam Run</div><div class="timeline-title lang-zh">驾考满分通关</div>
+        <div class="timeline-desc lang-en">All four PRC driving exam subjects passed on first attempt within 2 months — far faster than the national average. Subject 2 (parking skills) and Subject 3 (road test) with full marks.</div>
+        <div class="timeline-desc lang-zh">中国驾考4个科目2个月内一次性通过——远快于全国平均水平。科目二（场地技能）和科目三（道路驾驶）满分。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2020–2024</div>
+        <div class="timeline-title lang-en">The Hardening — Northern Chinese Urban Driving</div><div class="timeline-title lang-zh">淬炼——中国北方城市驾驶</div>
+        <div class="timeline-desc lang-en">Daily driving in aggressive northern Chinese traffic. Cut-ins at centimeter distances. E-bikes from blind spots. Delivery riders on phones running reds. Developed pre-cognitive hazard detection. ~1-2 near-misses per driving day forged an instinct no textbook can teach.</div>
+        <div class="timeline-desc lang-zh">在中国北方激烈交通环境中每日驾驶。厘米级加塞。盲区中窜出的电动车。外卖骑手看手机闯红灯。形成了预认知级别的危险探测能力。每天1-2次差点碰撞，锻造了教科书无法教授的直觉。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2021–2025</div>
+        <div class="timeline-title lang-en">The Rider Years — UCSB + China E-bike</div><div class="timeline-title lang-zh">骑手岁月——UCSB + 中国电动车</div>
+        <div class="timeline-desc lang-en">4 years at UCSB: 6 km daily bicycle/e-bike commute through campus, roundabouts, and California roads. Learned the vulnerability of being invisible to cars. Returned to China and experienced e-bike chaos from the handlebars. This completed the feedback loop: I now knew <em>both</em> what drivers miss <em>and</em> what riders fear.</div>
+        <div class="timeline-desc lang-zh">UCSB 4年：每日6公里自行车/电动车通勤，穿越校园、环岛和加州道路。学会了"被汽车忽视"的脆弱感。回到中国后在电动车上体验混乱交通。这完成了反馈循环：我现在<em>既</em>知道驾驶员会忽略什么，<em>也</em>知道骑手害怕什么。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year"><span class="lang-en-i">NOW</span><span class="lang-zh-i">现在</span></div>
+        <div class="timeline-title lang-en">The Mission</div><div class="timeline-title lang-zh">使命</div>
+        <div class="timeline-desc lang-en">34,000+ total km on wheels. Zero accidents. A brain trained as a human sensor fusion system — processing driver, rider, Chinese, and American perspectives simultaneously. Ready to apply this to the hardest problem in autonomous driving: making FSD work in the world's most complex traffic environment.</div>
+        <div class="timeline-desc lang-zh">34,000+公里总轮上里程。零事故。一个被训练成人肉传感器融合系统的大脑——同时处理驾驶员、骑手、中国、美国四个维度的视角。准备好将其应用于自动驾驶最难的问题：让FSD在世界上最复杂的交通环境中工作。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FSD INSIGHTS ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">// 06</div>
+    <h2 class="section-title"><span class="lang-en-i">What This Means for FSD Testing</span><span class="lang-zh-i">这对FSD测试意味着什么</span></h2>
+    <p class="section-desc lang-en">Translating dual-perspective road experience into test engineering value.</p>
+    <p class="section-desc lang-zh">将双视角道路经验转化为测试工程价值。</p>
+
+    <div class="data-grid">
+      <div class="data-card">
+        <div class="card-icon">&#x1f50d;</div>
+        <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.4rem;"><span class="lang-en-i">VRU-Aware Route Design</span><span class="lang-zh-i">弱势道路使用者感知的路线设计</span></div>
+        <div style="color:var(--text-secondary);font-size:0.78rem;line-height:1.6;" class="lang-en">I know which intersections, which times, and which geometries produce high-risk car-bike conflicts. I can design test routes that stress the system's VRU detection — not just its lane-keeping.</div>
+        <div style="color:var(--text-secondary);font-size:0.78rem;line-height:1.6;" class="lang-zh">我知道哪些路口、哪些时段、哪些几何结构会产生高风险的汽车-自行车冲突。我能设计测试路线来压测系统的VRU检测能力——而不仅仅是车道保持。</div>
+      </div>
+      <div class="data-card">
+        <div class="card-icon">&#x1f3af;</div>
+        <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.4rem;"><span class="lang-en-i">Failure Mode Anticipation</span><span class="lang-zh-i">故障模式预判</span></div>
+        <div style="color:var(--text-secondary);font-size:0.78rem;line-height:1.6;" class="lang-en">2,000+ near-misses trained me to see the <em>precursors</em> to danger. I can spot when a system is about to fail before it fails — critical for regression testing and performance degradation detection.</div>
+        <div style="color:var(--text-secondary);font-size:0.78rem;line-height:1.6;" class="lang-zh">2000+次差点碰撞训练了我看见危险的<em>前兆</em>。我能在系统即将失效之前发现它——这对回归测试和性能退化检测至关重要。</div>
+      </div>
+      <div class="data-card">
+        <div class="card-icon">&#x1f310;</div>
+        <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.4rem;"><span class="lang-en-i">Cross-Cultural Bridge</span><span class="lang-zh-i">跨文化桥梁</span></div>
+        <div style="color:var(--text-secondary);font-size:0.78rem;line-height:1.6;" class="lang-en">Bilingual. I can explain Chinese driving behaviors to American engineers, and translate engineering requirements back to Chinese test scenarios. The bridge between Palo Alto and Shanghai.</div>
+        <div style="color:var(--text-secondary);font-size:0.78rem;line-height:1.6;" class="lang-zh">双语。我能向美国工程师解释中国的驾驶行为，也能将工程需求翻译回中国的测试场景。Palo Alto与上海之间的桥梁。</div>
+      </div>
+      <div class="data-card">
+        <div class="card-icon">&#x1f4ca;</div>
+        <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.4rem;"><span class="lang-en-i">Data-Driven Reporting</span><span class="lang-zh-i">数据驱动报告</span></div>
+        <div style="color:var(--text-secondary);font-size:0.78rem;line-height:1.6;" class="lang-en">Python, statistical analysis, and structured documentation from academic training. Can use Tesla tools (Garage, Toolbox, Jira) to classify and report issues with quantitative rigor.</div>
+        <div style="color:var(--text-secondary);font-size:0.78rem;line-height:1.6;" class="lang-zh">Python、统计分析和结构化文档能力来自学术训练。能使用特斯拉工具（Garage、Toolbox、Jira）以量化严谨性分类和报告问题。</div>
+      </div>
+    </div>
+
+    <div class="cta-block">
+      <h3><span class="lang-en-i">Tesla Autopilot — Shanghai Test Engineering</span><span class="lang-zh-i">特斯拉 Autopilot — 上海测试工程</span></h3>
+      <p class="lang-en">Seeking the test engineer who doesn't just execute the checklist, but understands why each scenario matters — from both sides of the windshield.</p>
+      <p class="lang-zh">寻找一个不只是执行检查清单，而是理解每个场景为什么重要的测试工程师——从挡风玻璃的两侧。</p>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-muted);">
+        <span class="lang-en-i">AVAILABLE FOR: High-frequency travel &bull; Extended road testing &bull; Cross-timezone collaboration</span>
+        <span class="lang-zh-i">可接受：高频出差 &bull; 长时间道路测试 &bull; 跨时区协作</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span class="lang-en-i">Driving Dossier &copy; 2026 — Sources: WHO, NHTSA, China Statistical Yearbook, Atchley et al. (Safety Science, 2014), IEEE (2025), Zhejiang University (2026), Journal of Safety Research (2025)</span>
+    <span class="lang-zh-i">驾驶档案 &copy; 2026 — 数据来源：WHO、NHTSA、中国统计年鉴、Atchley et al. (Safety Science, 2014)、IEEE (2025)、浙江大学 (2026)、Journal of Safety Research (2025)</span>
+  </div>
+</footer>
+
+<script>
+// ── Language Switch ──
+function switchLang(lang) {
+  document.documentElement.className = lang === 'zh' ? 'lang-zh' : '';
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+}
+
+// ── Radar Chart ──
+(function() {
+  const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  const labels = [
+    ['Defensive\nPrediction','防御性\n预判'],
+    ['Hazard\nRecognition','危险\n识别'],
+    ['China\nRoad IQ','中国\n路况'],
+    ['US Road\nIQ','美国\n路况'],
+    ['VRU\nEmpathy','弱势道路\n共情'],
+    ['E-bike\nPerspective','电动车\n视角'],
+    ['Cross-Cultural\nInsight','跨文化\n洞察']
+  ];
+  const values = [95, 92, 90, 75, 88, 85, 88];
+  const N = labels.length;
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const s = Math.min(rect.width, rect.height);
+    canvas.width = s; canvas.height = s;
+  }
+
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+    const cx = W/2, cy = H/2, R = Math.min(W,H)*0.36;
+    ctx.clearRect(0,0,W,H);
+
+    // Grid
+    for (let r=1; r<=4; r++) {
+      ctx.beginPath(); ctx.arc(cx,cy,R*r/4,0,Math.PI*2);
+      ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.stroke();
+    }
+    // Axes
+    for (let i=0;i<N;i++) {
+      const a=-Math.PI/2+(2*Math.PI*i)/N;
+      ctx.beginPath(); ctx.moveTo(cx,cy);
+      ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));
+      ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.stroke();
+    }
+    // Data fill
+    ctx.beginPath();
+    for (let i=0;i<N;i++) {
+      const a=-Math.PI/2+(2*Math.PI*i)/N;
+      const r=R*values[i]/100;
+      const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
+      if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.fillStyle='rgba(0,229,255,0.1)'; ctx.fill();
+    ctx.strokeStyle='rgba(0,229,255,0.5)'; ctx.lineWidth=1.5; ctx.stroke();
+
+    // Dots + Labels
+    for (let i=0;i<N;i++) {
+      const a=-Math.PI/2+(2*Math.PI*i)/N;
+      const r=R*values[i]/100;
+      const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
+      ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle='#00e5ff'; ctx.fill();
+      const lx=cx+(R+10)*Math.cos(a), ly=cy+(R+10)*Math.sin(a);
+      ctx.fillStyle='#8897a8';
+      const isZh=document.documentElement.className==='lang-zh';
+      ctx.font='8.5px "IBM Plex Sans","Noto Sans SC",sans-serif';
+      ctx.textAlign='center';
+      const lines=labels[i][isZh?1:0].split('\n');
+      ctx.fillText(lines[0],lx,ly-7);
+      if(lines[1])ctx.fillText(lines[1],lx,ly+8);
+    }
+  }
+
+  resize(); draw();
+  window.addEventListener('resize',()=>{resize();draw();});
+  // Redraw on lang switch
+  const origSwitch=switchLang;
+  window.switchLang=function(l){origSwitch(l);setTimeout(draw,50);};
+})();
+
+// ── Counters ──
+function animateCounter(id,target,duration) {
+  const el=document.getElementById(id);
+  if(!el)return;
+  const start=performance.now();
+  function tick(now){
+    const p=Math.min((now-start)/duration,1);
+    const eased=1-Math.pow(1-p,3);
+    el.textContent=Math.round(target*eased).toLocaleString();
+    if(p<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ── Bar animation ──
+function animateBars(){
+  document.querySelectorAll('.scenario-bar-fill[data-width]').forEach(bar=>{
+    const rect=bar.getBoundingClientRect();
+    if(rect.top<window.innerHeight&&rect.bottom>0)bar.style.width=bar.getAttribute('data-width');
+  });
+}
+
+window.addEventListener('load',()=>{
+  setTimeout(()=>animateCounter('counter-km',30000,1800),400);
+  setTimeout(()=>animateCounter('counter-ebike',4000,1600),600);
+  setTimeout(()=>animateCounter('counter-nearmiss',2000,1800),800);
+  animateBars();
+});
+window.addEventListener('scroll',animateBars);
+</script>
+
+</body>
+</html>
